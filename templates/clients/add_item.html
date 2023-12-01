@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a product</title>
+
+
+    <script src="https://kit.fontawesome.com/0ad7b7378d.js" crossorigin="anonymous"></script>		
+	<link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+	<link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+	<link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    
+    
+    <form action="{% url 'client_add_item' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</body>
+</html>

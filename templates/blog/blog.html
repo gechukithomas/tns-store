@@ -1,0 +1,482 @@
+{% load static %} 
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <!-- Author Meta -->
+    <meta name="author" content="CodePixar">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>TnS Stores</title>
+    <!--
+			CSS
+			============================================= -->
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ion.rangeSlider.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ion.rangeSlider.skinFlat.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<style>
+    
+	.card {
+/* Add shadows to create the "card" effect */
+box-shadow: 0 4px 8px  rgba(0, 195, 255, 0.2);
+transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+box-shadow: 0 8px 16px 0 rgb(123, 150, 224);
+}
+</style>
+<body>
+
+    <!-- Start Header Area -->
+	<header class="header_area sticky-header">
+		<div class="main_menu">
+			
+			<nav class="navbar navbar-expand-lg navbar-light main_box">
+				<div class=" container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<a class="navbar-brand logo_h" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+					
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+
+					</button>
+					
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+						<ul class="nav navbar-nav menu_nav ml-auto">
+							<li class="nav-item "><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+							<li class="nav-item  submenu dropdown">
+								<a href="" class="nav-link dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Shop</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="{% url 'shop'  %}">Fashion & Design</a></li>
+									
+								</ul>
+							</li>
+                            <li class="nav-item submenu dropdown active">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Blog</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item "><a class="nav-link" href="{% url 'blog' %}">Blog</a></li>
+									<li class="nav-item "><a class="nav-link" href="{% url 'blog_service' 'service' %}">Services</a></li>
+								</ul>
+							</li>
+							
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Accounts</a>
+								<ul class="dropdown-menu">
+									{% if request.user.is_authenticated != True %}
+									<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+									<li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Signup</a></li>
+									{% endif %}
+									
+									{% if request.user.is_authenticated %}
+									<li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+									<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">logout</a></li>
+									{% endif %}
+								</ul>
+							</li>
+							<li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+							
+						</ul>
+
+						
+
+						<ul class="nav navbar-nav navbar-right">
+							<li class="nav-item"><a href="{% url 'orders' %}" class="cart"><span class="ti-bag"></span></a></li>
+							<li class="nav-item">
+								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+		
+
+		<div class="search_input" id="search_input_box">
+			<div class="container">
+				<form class="d-flex justify-content-between" action="{% url 'search' %}" method="POST">
+					{% csrf_token %}
+					<input type="text" class="form-control" name="search_key" placeholder="search here">
+					<button type="submit" class="btn btn-primary"></button>
+					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
+				</form>
+			</div>
+		</div>
+		
+	</header>
+	<!-- End Header Area -->
+
+    <br><br><br><br><br><br>
+
+
+
+    <!--================Blog Area =================-->
+    
+
+    <section class="blog_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div  class="blog_left_sidebar ">   
+                        {% include 'includes/alerts.html' %}
+                        {% for X in BLOG.object_list %}
+                        <article  class="row blog_item  ">
+                            <div class="col-md-3">
+                                <div class="blog_info text-right">
+                                    
+                                    <div style="color:burlywood" class="post_tag ">
+                                        {% if X.category == 'food' %}
+                                        <a class="active" href="{% url 'blog_category' 'food' %}">Food,</a>
+                                        {% else %}
+                                        <a class="" href="{% url 'blog_category' 'food' %}">Food,</a>
+                                        {% endif %}
+
+                                        {% if X.category == 'technology' %}
+                                        <a class="active" href="{% url 'blog_category' 'technology' %}">Technology,</a>
+                                        {% else %}
+                                        <a class="" href="{% url 'blog_category' 'technology' %}">Technology,</a>
+                                        {% endif %}
+
+                                        {% if X.category == 'travel' %}
+                                        <a class="active" href="{% url 'blog_category' 'travel' %}">Travel & Adventure,</a>
+                                        {% else %}
+                                        <a class="" href="{% url 'blog_category' 'travel' %}">Travel & Adventure,</a>
+                                        {% endif %}
+
+                                        {% if X.category == 'art' %}
+                                        <a class="active" href="{% url 'blog_category' 'art' %}">Art,</a>
+                                        {% else %}
+                                        <a class="" href="{% url 'blog_category' 'art' %}">Art,</a>
+                                        {% endif %}
+
+                                        {% if X.category == 'lifestyle' %}
+                                        <a class="active" href="{% url 'blog_category' 'lifestyle' %}">Lifestyle,</a>
+                                        {% else %}
+                                        <a class="" href="{% url 'blog_category' 'lifestyle' %}">Lifestyle,</a>
+                                        {% endif %}
+
+                                        {% if X.category == 'fashion' %}
+                                        <a class="active" href="{% url 'blog_category' 'fashion' %}">Fashion</a>
+                                        {% else %}
+                                        <a class="" href="{% url 'blog_category' 'fashion' %}">Fashion</a>
+                                        {% endif %}
+                                    </div>
+                                    
+                                   
+                                    <ul  class="blog_meta list">
+                                        <li><a href="">{{ X.author.username }}<i class="lnr lnr-user"></i></a></li>
+                                        <li><a href="">{{ X.date_added|naturaltime }}<i class="lnr lnr-calendar-full"></i></a></li>
+                                        <li><a href="">{% if not X.get_total_views %} not viewed {% elif X.get_total_views == 1 %} {{ X.get_total_views}} view {% else %} {{ X.get_total_views }} views {% endif %}<i class="lnr lnr-eye"></i></a></li>
+                                        <li><a href="">{% if not X.get_total_comments %} no comment {% elif X.get_total_comments == 1 %} {{ X.get_total_comments}} comment {% else %} {{ X.get_total_comments }} comments {% endif %}<i class="lnr lnr-bubble"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div style="border-radius: 10px;" class="col-md-9 ">
+                                <br>
+                                <div class="blog_post ">
+                                    <a class="card" href="{{ X.get_blog_url }}"><img  src="{{ X.image.url }}" alt="" ></a>
+                                    <div class="blog_details ">
+                                        <a href="{{ X.get_blog_url }}">
+                                            <h2>{{ X.title }}</h2>
+                                        </a>
+                                        <p>{{ X.short_description }}</p>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                        <nav class="blog-pagination justify-content-center d-flex">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    {% if BLOG.has_previous %}
+                                    <a href="?page={{ BLOG.previous_page_number }}" class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">
+                                            <span class="lnr lnr-chevron-left"></span>
+                                        </span>
+                                    </a>
+                                    {% endif %}
+                                </li>
+                               
+                                
+                                <li class="page-item"><a href="?page=1" class="page-link">01</a></li>
+                                <li class="page-item"><a href="?page=2" class="page-link">02</a></li>
+                                <li class="page-item"><a href="?page=3" class="page-link">03</a></li>
+                                <li class="page-item"><a href="?page=5" class="page-link">04</a></li>
+                                <li class="page-item"><a href="?page=6" class="page-link">09</a></li>
+                                <li class="page-item">
+
+                                    <li class="page-item">
+                                        {% if BLOG.has_next %}
+                                        <a href="?page={{ BLOG.next_page_number }}" class="page-link" aria-label="Next">
+                                            <span aria-hidden="true">
+                                                <span class="lnr lnr-chevron-right"></span>
+                                            </span>
+                                        </a>
+                                        {% endif %}
+                                    </li>    
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="blog_right_sidebar card">
+                        <aside  class="single_sidebar_widget search_widget">
+                            <form action="{% url 'blog_search' %}" method="POST">
+                                {% csrf_token %}
+                                <div  class="input-group">
+                                    <input style="background-color: blue;" type="text" class="form-control" name="search_key" {% if SK %} placeholder="{{ SK }}" {% else %} placeholder="Search Post" {% endif %} onfocus="this.placeholder = 'search here'" onblur="this.placeholder = 'Search Posts'">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button"><i class="lnr lnr-magnifier"></i></button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </form>
+                            <div class="br"></div>
+                        </aside>
+                        <aside class="single_sidebar_widget author_widget">
+                            {% if USER  %}
+                             
+                           <!-- <img style="min-height: 60px;" class="author_img rounded-circle" src="{% static 'img/fave.png' %}" alt="">-->
+                            <img style="min-width: 170px; max-width: 110px;"  class="author_img rounded-circle " src="{{ USER.image.url }}" alt="" width="170">
+                            <h4>{{ USER.user.first_name }}</h4>
+                            <div class="social_icon">
+                               
+                                <a href="https://api.whatsapp.com/send?phone=+254704436540"><i class="fa fa-whatsapp"></i></a>
+                            </div>
+                            <p>{{ USER.bio_description }}<br> </p>   
+            
+                
+                            {% endif %}
+                            <div class="br"></div>
+                        </aside>
+                        
+                        <aside class="single_sidebar_widget popular_post_widget">
+                            <h3 style="background-color: blue;" class="widget_title">Popular Posts</h3>
+                            {% for X in POPULAR_BLOGS %}
+                            <div class="media post_item">
+                               <a href="{{ X.get_blog_url }}"><img style="border-radius: 10px;" src="{{ X.blog.image.url }}" alt="post" width="100px" ></a>
+                                <div class="media-body">
+                                    <a href="blog-details.html">
+                                        <h3>{{ X.title}}</h3>
+                                    </a>
+                                    <p>{{ X.date_added|naturaltime }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="br"></div>
+                        </aside>
+                        
+                        <aside class="single_sidebar_widget ads_widget">
+                            <a href="#"><img class="img-fluid" src="img/blog/add.jpg" alt=""></a>
+                            <div class="br"></div>
+                        </aside>
+                        <aside class="single_sidebar_widget post_category_widget">
+                            <h4 style="background-color: blue;" class="widget_title">Post Categories</h4>
+                            <ul class="list cat-list">
+                                <li>
+                                    <a href="{% url 'blog_category' 'technology' %}" class="d-flex justify-content-between">
+                                        <a href="{% url 'blog_service' 'services'  %}"><p style="color: blue; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" >Looking for Services ? </p></a>
+                                         
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{% url 'blog_category' 'technology' %}" class="d-flex justify-content-between">
+                                        <p>Technology</p>
+                                        <p>{{TECHNOLOGY}}</p> 
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'blog_category' 'lifestyle' %}" class="d-flex justify-content-between">
+                                        <p>Lifestyle</p>
+                                        <P>{{ LIFESTYLE }}</P>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'blog_category' 'fashion' %}" class="d-flex justify-content-between">
+                                        <p>Fashion</p>
+                                        <P>{{ FASHION }}</P>
+                                </li>
+                                <li>
+                                    <a href="{% url 'blog_category' 'art' %}" class="d-flex justify-content-between">
+                                        <p>Art</p>
+                                        <p>{{ ART }}</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'blog_category' 'food' %}" class="d-flex justify-content-between">
+                                        <p>Food</p>
+                                        <p>{{ FOOD }}</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'blog_category' 'travel' %}" class="d-flex justify-content-between">
+                                        <p>Travel & Adventure</p>
+                                        <P>{{ ADVENTURE }}</P>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="br"></div>
+                        </aside>
+                        <aside class="single-sidebar-widget newsletter_widget">
+                            <h4 style="background-color: blue;" class="widget_title">Newsletter</h4>
+                            <p>
+                                Here, I focus on a range of items and features that we use in life without
+                                giving them a second thought.
+                            </p>
+                            <div class="form-group d-flex flex-row">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Enter email"
+                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email'">
+                                </div>
+                                <a style="background-color: blue;" href="#" class="bbtns">Subcribe</a>
+                            </div>
+                            <p class="text-bottom">You can unsubscribe at any time</p>
+                            <div class="br"></div>
+                        </aside>
+                        <aside class="single-sidebar-widget tag_cloud_widget">
+                            <h4 style="background-color: blue;" class="widget_title">Tag Clouds</h4>
+                            <div>
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                </form>
+                            </div>
+                            <ul class="list">
+                                <li><a href="{% url 'blog_category' 'technology' %}">Technology</a></li>
+                                <li><a href="{% url 'blog_category' 'fashion' %}">Fashion</a></li>
+                                <li><a href="{% url 'blog_category' 'food' %}">Food</a></li>
+                                <li><a href="{% url 'blog_category' 'lifesytle' %}">Lifestyle</a></li>
+                                <li><a href="{% url 'blog_category' 'art' %}">Art</a></li>
+                                <li><a href="{% url 'blog_category' 'travel' %}">Travel & Adventure</a></li>
+                            </ul>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br><br>
+    <!--================Blog Area =================-->
+
+    <!-- start footer Area -->
+		<footer class="footer-area section_gap">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3  col-md-6 col-sm-6">
+						<div class="single-footer-widget">
+							<h6>About Us</h6>
+							<p>
+								<span style="color: white;"> Tns Stores </span>: an online E-commerce platform developed to ease the marketing process for traders and also allowing pre-orders to be made  	
+							</p>
+						</div>
+					</div>
+					<div class="col-lg-4  col-md-6 col-sm-6">
+						<div class="single-footer-widget">
+							<h6>Newsletter</h6>
+							<p>Stay update with our latest</p>
+							<div class="" id="mc_embed_signup">
+
+								<form target="_blank" novalidate="true" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+								method="get" class="form-inline">
+
+									<div class="d-flex flex-row">
+
+										<input class="form-control" name="EMAIL" placeholder="Enter Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '"
+										required="" type="email">
+
+
+										<button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+										<div style="position: absolute; left: -5000px;">
+											<input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
+										</div>
+
+										<!-- <div class="col-lg-4 col-md-4">
+														<button class="bb-btn btn"><span class="lnr lnr-arrow-right"></span></button>
+													</div>  -->
+									</div>
+									<div class="info"></div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3  col-md-6 col-sm-6">
+						<div class="single-footer-widget mail-chimp">
+							<h6 class="mb-20">Instragram Feed</h6>
+							<ul class="instafeed d-flex flex-wrap">
+								<li><img src="img/i1.jpg" alt=""></li>
+								<li><img src="img/i2.jpg" alt=""></li>
+								<li><img src="img/i3.jpg" alt=""></li>
+								<li><img src="img/i4.jpg" alt=""></li>
+								<li><img src="img/i5.jpg" alt=""></li>
+								<li><img src="img/i6.jpg" alt=""></li>
+								<li><img src="img/i7.jpg" alt=""></li>
+								<li><img src="img/i8.jpg" alt=""></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-6 col-sm-6">
+						<div class="single-footer-widget">
+							<h6>Follow Us</h6>
+							<p>Let us be social</p>
+							<div class="footer-social d-flex align-items-center">
+								<a href="#"><i class="fa fa-facebook"></i></a>
+								<a href="#"><i class="fa fa-twitter"></i></a>
+								<a href="#"><i class="fa fa-dribbble"></i></a>
+								<a href="#"><i class="fa fa-behance"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</footer>
+		<!-- End footer Area -->
+
+    <script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	 crossorigin="anonymous"></script>
+	<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+	<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+	<script src="{% static 'js/jquery.sticky.js' %}"></script>
+    <script src="{% static 'js/nouislider.min.js' %}"></script>
+	<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="{% static 'js/gmaps.min.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
